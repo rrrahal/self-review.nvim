@@ -3,6 +3,10 @@ local gitFns = require("git")
 local windows = require("window")
 local gitDiff = require("git.get_diff")
 
+-- TODO: add meta information about the file (filename) and the amount of diffs
+-- TODO: add footer with keymaps/actions
+-- TODO: add keymap to add diff
+
 M.setup = function() end
 
 M.start_diff = function()
