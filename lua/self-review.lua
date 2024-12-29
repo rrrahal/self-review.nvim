@@ -5,15 +5,36 @@ local gitDiff = require("git.get_diff")
 
 M.setup = function() end
 
-local files = gitFns.get_git_files()
+M.start_diff = function()
+  local files = gitFns.get_git_files()
+  local w = windows.create_window()
+  vim.bo[w.buf].filetype = "diff"
 
-for _, file in ipairs(files) do
-  if _ == 1 then
-    local diff = gitDiff.get_diff(file)
-    local w = windows.create_window()
-    local lines = vim.split(diff, "\n")
-    vim.api.nvim_buf_set_lines(w.buf, 1, -1, false, lines)
-  end
+  local current_diff = 1
+  local diff = gitDiff.get_diff(files[current_diff])
+  vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, diff)
+
+  vim.keymap.set("n", "n", function()
+    current_diff = math.min(current_diff + 1, #files)
+    local newDiff = gitDiff.get_diff(files[current_diff])
+    vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, newDiff)
+  end, {
+    buffer = w.buf,
+  })
+
+  vim.keymap.set("n", "p", function()
+    current_diff = math.max(current_diff - 1, 1)
+    local newDiff = gitDiff.get_diff(files[current_diff])
+    vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, newDiff)
+  end, {
+    buffer = w.buf,
+  })
+
+  vim.keymap.set("n", "q", function()
+    vim.api.nvim_win_close(w.win, true)
+  end, {
+    buffer = w.buf,
+  })
 end
 
 return M

@@ -1,7 +1,7 @@
 local M = {}
 
 local trim = function(s)
-  return s:gsub("^%s*(.-)%s*$", "%1")
+  return vim.trim(s)
 end
 
 M.get_git_files = function()
