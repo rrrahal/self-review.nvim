@@ -9,6 +9,8 @@ local gitDiff = require("git.get_diff")
 
 M.setup = function() end
 
+-- TODO: it breaks when there are no diffs
+-- TODO: is it safe to add those keymaps? double check
 M.start_diff = function()
   local files = gitFns.get_git_files()
   local w = windows.create_window()
