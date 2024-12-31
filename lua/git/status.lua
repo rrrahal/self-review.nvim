@@ -4,8 +4,7 @@ local trim = function(s)
   return vim.trim(s)
 end
 
--- TODO: refactor this module
-M.get_git_files = function()
+M.changed_files = function()
   -- TODO: does not work when adding a new folder
   local lines = vim.fn.system("git status -s")
 
