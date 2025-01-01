@@ -1,18 +1,22 @@
 local M = {}
 
-local trim = function(s)
-  return vim.trim(s)
-end
-
--- TODO: add tests for this function
-local parse_files = function(lines)
+-- TODO: add docs for LSP/Intelisense
+local parse_status_lines = function(lines)
   local files = {}
 
   for _, line in ipairs(lines) do
-    local trimmed_line = trim(line)
+    local trimmed_line = vim.trim(line)
     local type, path = trimmed_line:match("^(%S+)[ ]*(.*)$")
-    local parsed = { type = type, path = path }
-    table.insert(files, parsed)
+    if type == "R" then
+      local split = vim.split(path, " -> ", { plain = true })
+      local old_path = split[1]
+      local new_path = split[2]
+      local parsed = { type = type, path = old_path, new_path = new_path }
+      table.insert(files, parsed)
+    else
+      local parsed = { type = type, path = path }
+      table.insert(files, parsed)
+    end
   end
 
   return files
@@ -29,9 +33,12 @@ M.changed_files = function()
     end,
   }):sync()
 
-  local parsed_files = parse_files(lines)
+  local parsed_files = parse_status_lines(lines)
 
   return parsed_files
 end
+
+-- (Internal) Exposed for testing purposes.
+M._parse_status_lines = parse_status_lines
 
 return M
