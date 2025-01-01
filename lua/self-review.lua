@@ -17,12 +17,12 @@ M.start_diff = function()
   vim.bo[w.buf].filetype = "diff"
 
   local current_diff = 1
-  local diff = diffMod.get_diff(files[current_diff])
+  local diff = diffMod.get_diff(files[current_diff].path)
   vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, diff)
 
   vim.keymap.set("n", "n", function()
     current_diff = math.min(current_diff + 1, #files)
-    local newDiff = diffMod.get_diff(files[current_diff])
+    local newDiff = diffMod.get_diff(files[current_diff].path)
     vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, newDiff)
   end, {
     buffer = w.buf,
@@ -30,7 +30,7 @@ M.start_diff = function()
 
   vim.keymap.set("n", "p", function()
     current_diff = math.max(current_diff - 1, 1)
-    local newDiff = diffMod.get_diff(files[current_diff])
+    local newDiff = diffMod.get_diff(files[current_diff].path)
     vim.api.nvim_buf_set_lines(w.buf, 0, -1, false, newDiff)
   end, {
     buffer = w.buf,
