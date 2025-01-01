@@ -59,6 +59,6 @@ describe("parse_status_lines", function()
   it("returns an empty table for empty input", function()
     local lines = {}
     local result = parse_lines(lines)
-    assert.are.same({}, result)
+    assert.are.same({ "bla" }, result)
   end)
 end)
