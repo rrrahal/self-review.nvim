@@ -28,6 +28,14 @@ local windows_configs = function()
       col = col,
       style = "minimal",
     },
+    footer = {
+      relative = "editor",
+      width = win_width,
+      height = 1,
+      row = win_height + 7,
+      col = col,
+      style = "minimal",
+    },
   }
 end
 
@@ -46,16 +54,18 @@ M.create_windows = function()
   local cfgs = windows_configs()
 
   local header = create_window(cfgs.header)
+  local footer = create_window(cfgs.footer)
   local body = create_window(cfgs.body)
 
   vim.api.nvim_create_autocmd("BufLeave", {
     buffer = body.buf,
     callback = function()
       pcall(vim.api.nvim_win_close, header.win, true)
+      pcall(vim.api.nvim_win_close, footer.win, true)
     end,
   })
 
-  return { header = header, body = body }
+  return { header = header, body = body, footer = footer }
 end
 
 return M

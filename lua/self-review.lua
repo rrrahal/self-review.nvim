@@ -11,6 +11,7 @@ local M = {}
 local set_window_content = function(f_windows, header, body, footer)
   vim.api.nvim_buf_set_lines(f_windows.body.buf, 0, -1, false, body)
   vim.api.nvim_buf_set_lines(f_windows.header.buf, 0, -1, false, header)
+  vim.api.nvim_buf_set_lines(f_windows.footer.buf, 0, -1, false, footer)
 end
 
 -- TODO: it breaks when there are no diffs
@@ -22,12 +23,12 @@ M.start_diff = function()
 
   local current_diff = 1
   local diff = diffMod.get_diff(files[current_diff].path)
-  set_window_content(floating_windows, { files[current_diff].path }, diff)
+  set_window_content(floating_windows, { files[current_diff].path }, diff, { current_diff .. "/" .. #files })
 
   vim.keymap.set("n", "n", function()
     current_diff = math.min(current_diff + 1, #files)
     local newDiff = diffMod.get_diff(files[current_diff].path)
-    set_window_content(floating_windows, { files[current_diff].path }, newDiff)
+    set_window_content(floating_windows, { files[current_diff].path }, newDiff, { current_diff .. "/" .. #files })
   end, {
     buffer = floating_windows.body.buf,
   })
@@ -35,7 +36,7 @@ M.start_diff = function()
   vim.keymap.set("n", "p", function()
     current_diff = math.max(current_diff - 1, 1)
     local newDiff = diffMod.get_diff(files[current_diff].path)
-    set_window_content(floating_windows, { files[current_diff].path }, newDiff)
+    set_window_content(floating_windows, { files[current_diff].path }, newDiff, { current_diff .. "/" .. #files })
   end, {
     buffer = floating_windows.body.buf,
   })
