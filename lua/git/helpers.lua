@@ -42,3 +42,5 @@ M.get_hunks_with_context = function()
 
   return result
 end
+
+return M
