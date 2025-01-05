@@ -18,6 +18,12 @@ end
 -- TODO: is it safe to add those keymaps? double check
 M.start_diff = function()
   local files = status.changed_files()
+
+  -- if there are no changed files, then do nothing
+  if #files == 0 then
+    vim.print("No changed files found in current repo")
+    return
+  end
   local floating_windows = windows.create_windows()
   vim.bo[floating_windows.body.buf].filetype = "diff"
 
