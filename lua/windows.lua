@@ -32,7 +32,7 @@ local windows_configs = function()
       relative = "editor",
       width = win_width,
       height = 1,
-      row = win_height + 7,
+      row = win_height + 5,
       col = col,
       style = "minimal",
     },
@@ -41,11 +41,7 @@ end
 
 local create_window = function(config)
   local buf = vim.api.nvim_create_buf(false, true)
-
-  vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-
   local win = vim.api.nvim_open_win(buf, true, config)
-  vim.api.nvim_win_set_option(win, "cursorline", true)
 
   return { win = win, buf = buf }
 end
