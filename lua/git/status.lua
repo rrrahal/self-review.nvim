@@ -13,6 +13,9 @@ local parse_status_lines = function(lines)
       local new_path = split[2]
       local parsed = { type = type, path = old_path, new_path = new_path }
       table.insert(files, parsed)
+    elseif type == "??" then
+      local parsed = { type = "A", path = path }
+      table.insert(files, parsed)
     else
       local parsed = { type = type, path = path }
       table.insert(files, parsed)

@@ -28,21 +28,31 @@ M.start_diff = function()
   vim.bo[floating_windows.body.buf].filetype = "diff"
 
   local current_diff = 1
-  local diff = diffMod.get_diff(files[current_diff].path)
-  set_window_content(floating_windows, { files[current_diff].path }, diff, { current_diff .. "/" .. #files })
+  local diff = diffMod.get_diff(files[current_diff])
+  set_window_content(floating_windows, { files[current_diff].path }, diff.parsed, { current_diff .. "/" .. #files })
 
   vim.keymap.set("n", "n", function()
     current_diff = math.min(current_diff + 1, #files)
-    local newDiff = diffMod.get_diff(files[current_diff].path)
-    set_window_content(floating_windows, { files[current_diff].path }, newDiff, { current_diff .. "/" .. #files })
+    local newDiff = diffMod.get_diff(files[current_diff])
+    set_window_content(
+      floating_windows,
+      { files[current_diff].path },
+      newDiff.parsed,
+      { current_diff .. "/" .. #files }
+    )
   end, {
     buffer = floating_windows.body.buf,
   })
 
   vim.keymap.set("n", "p", function()
     current_diff = math.max(current_diff - 1, 1)
-    local newDiff = diffMod.get_diff(files[current_diff].path)
-    set_window_content(floating_windows, { files[current_diff].path }, newDiff, { current_diff .. "/" .. #files })
+    local newDiff = diffMod.get_diff(files[current_diff])
+    set_window_content(
+      floating_windows,
+      { files[current_diff].path },
+      newDiff.parsed,
+      { current_diff .. "/" .. #files }
+    )
   end, {
     buffer = floating_windows.body.buf,
   })
