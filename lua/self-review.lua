@@ -14,7 +14,6 @@ local set_window_content = function(f_windows, header, body, footer)
   vim.api.nvim_buf_set_lines(f_windows.footer.buf, 0, -1, false, footer)
 end
 
--- TODO: it breaks when there are no diffs
 -- TODO: is it safe to add those keymaps? double check
 M.start_diff = function()
   local files = status.changed_files()

@@ -6,32 +6,33 @@ local M = {}
 --  header: {
 --    raw_header: string[]
 --  },
---  chunks: Chunk[],
+--  hunks: Hunk[],
 --  parsed: string[]
 -- }
+-- TODO: REDO this with treesitter
 local parse_diff = function(diffArray)
   local diffStruct = {
     original = diffArray,
     header = { raw_header = {} },
-    chunks = {},
+    hunks = {},
     parsed = {},
   }
 
   local in_header = true
-  local current_chunk = nil
+  local current_hunk = nil
 
   for _, line in ipairs(diffArray) do
     if in_header then
       table.insert(diffStruct.header.raw_header, line)
       if vim.startswith(line, "@@") then
-        current_chunk = { start_line = line, content = {} }
+        current_hunk = { start_line = line, content = {} }
         in_header = false
-        table.insert(diffStruct.chunks, current_chunk)
+        table.insert(diffStruct.hunks, current_hunk)
       end
     elseif vim.startswith(line, "@@") then
-      -- New chunk starts
-      current_chunk = { start_line = line, content = {} }
-      table.insert(diffStruct.chunks, current_chunk)
+      -- New hunk starts
+      current_hunk = { start_line = line, content = {} }
+      table.insert(diffStruct.hunks, current_hunk)
     else
       table.insert(diffStruct.parsed, line)
     end
