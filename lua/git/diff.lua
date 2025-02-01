@@ -55,6 +55,7 @@ M.get_diff = function(file)
     return parse_diff(diffArray)
   end
 
+  -- TODO: delete is still not working properly
   if type == "D" then
     local diff = vim.fn.system("git diff --no-index " .. filename .. " /dev/null")
     local diffArray = vim.split(diff, "\n")

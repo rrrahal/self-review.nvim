@@ -30,7 +30,7 @@ M.changed_files = function()
   local lines = {}
   Job:new({
     command = "git",
-    args = { "status", "--porcelain", "-u" },
+    args = { "status", "--porcelain", "-u", "--short" },
     on_exit = function(j)
       lines = j:result()
     end,
