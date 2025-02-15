@@ -11,7 +11,7 @@ local M = {}
 local set_window_content = function(f_windows, header, body, footer)
   vim.api.nvim_buf_set_lines(f_windows.body.buf, 0, -1, false, body)
   f_windows.set_file_header(header)
-  vim.api.nvim_buf_set_lines(f_windows.footer.buf, 0, -1, false, footer)
+  f_windows.set_footer(footer)
 end
 
 -- TODO: is it safe to add those keymaps? double check

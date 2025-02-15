@@ -32,11 +32,12 @@ local windows_configs = function()
     },
     footer = {
       relative = "editor",
-      width = win_width,
+      width = win_width - 2, -- accounting for the border padding
       height = 1,
       row = row + win_height - 1,
       col = col,
       style = "minimal",
+      border = "rounded",
       focusable = false,
     },
   }
@@ -56,19 +57,28 @@ M.create_windows = function()
   local footer = create_window(cfgs.footer)
   local body = create_window(cfgs.body)
 
-  -- Define custom highlight for header
-  vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
+  -- TODO: refactor this - separate windows from style
 
-  -- Function to format and update the header
+  vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
+  vim.api.nvim_set_hl(0, "GitDiffFooter", { fg = "#06B6D4", bold = true })
+
   local function update_header(buf, filename)
     local centered_title = " " .. filename .. " "
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, { centered_title })
     vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFilename", 0, 1, -1)
   end
 
-  -- Ensure the header updates dynamically
+  local function update_footer(buf, content)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
+    vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFooter", 0, 1, -1)
+  end
+
   local function set_file_header(filename)
     update_header(header.buf, filename)
+  end
+
+  local function set_footer(content)
+    update_footer(footer.buf, content)
   end
 
   -- Cleanup windows when body is closed
@@ -80,7 +90,7 @@ M.create_windows = function()
     end,
   })
 
-  return { header = header, body = body, footer = footer, set_file_header = set_file_header }
+  return { header = header, body = body, footer = footer, set_file_header = set_file_header, set_footer = set_footer }
 end
 
 return M
