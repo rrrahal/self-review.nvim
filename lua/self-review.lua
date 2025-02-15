@@ -8,10 +8,51 @@ local diffMod = require("git.diff")
 
 local M = {}
 
+-- Define custom highlight groups similar to VSCode diff colors
+vim.api.nvim_set_hl(0, "DiffAdd", { fg = "#81C784", bg = "none" })
+vim.api.nvim_set_hl(0, "DiffDelete", { fg = "#E57373", bg = "none" })
+vim.api.nvim_set_hl(0, "DiffChange", { fg = "#64B5F6", bg = "none" })
+
+local ns_gutter = vim.api.nvim_create_namespace("diff_gutter")
+
+local function apply_diff_highlights(buf, lines)
+  for i, line in ipairs(lines) do
+    if line:match("^%+") then
+      vim.api.nvim_buf_add_highlight(buf, -1, "DiffAdd", i - 1, 0, -1)
+    elseif line:match("^%-") then
+      vim.api.nvim_buf_add_highlight(buf, -1, "DiffDelete", i - 1, 0, -1)
+    end
+  end
+end
+
+local function add_gutter_marks(buf, lines)
+  vim.api.nvim_buf_clear_namespace(buf, ns_gutter, 0, -1)
+  for i, line in ipairs(lines) do
+    if line:match("^%+") then
+      vim.api.nvim_buf_set_extmark(buf, ns_gutter, i - 1, 0, {
+        virt_text = { { "▎", "DiffAdd" } },
+        virt_text_pos = "overlay",
+      })
+    elseif line:match("^%-") then
+      vim.api.nvim_buf_set_extmark(buf, ns_gutter, i - 1, 0, {
+        virt_text = { { "▎", "DiffDelete" } },
+        virt_text_pos = "overlay",
+      })
+    end
+  end
+end
+
 local set_window_content = function(f_windows, header, body, footer)
   vim.api.nvim_buf_set_lines(f_windows.body.buf, 0, -1, false, body)
   f_windows.set_file_header(header)
   f_windows.set_footer(footer)
+
+  -- TODO: refactor this to remove it from here
+  apply_diff_highlights(f_windows.body.buf, body)
+  add_gutter_marks(f_windows.body.buf, body)
+
+  local ft = vim.filetype.match({ filename = header }) or "plaintext"
+  vim.bo[f_windows.body.buf].filetype = ft
 end
 
 -- TODO: is it safe to add those keymaps? double check
@@ -24,7 +65,6 @@ M.start_diff = function()
     return
   end
   local floating_windows = windows.create_windows()
-  vim.bo[floating_windows.body.buf].filetype = "diff"
 
   local current_diff = 1
   local diff = diffMod.get_diff(files[current_diff])
