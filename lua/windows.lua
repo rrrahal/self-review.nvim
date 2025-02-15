@@ -24,11 +24,12 @@ local windows_configs = function()
 
     body = {
       relative = "editor",
-      width = win_width,
-      height = win_height - 2,
+      width = win_width - 2,
+      height = win_height - 2 - 2,
       row = row + 1,
       col = col,
       style = "minimal",
+      border = "rounded",
     },
     footer = {
       relative = "editor",
