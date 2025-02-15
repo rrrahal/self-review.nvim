@@ -13,17 +13,19 @@ local windows_configs = function()
   return {
     header = {
       relative = "editor",
-      width = win_width,
+      width = win_width - 2, -- accounting for the border padding
       height = 1,
-      row = row,
+      row = row - 2,
       col = col,
       style = "minimal",
+      border = "rounded",
+      focusable = false,
     },
 
     body = {
       relative = "editor",
       width = win_width,
-      height = win_height - 1,
+      height = win_height - 2,
       row = row + 1,
       col = col,
       style = "minimal",
@@ -32,9 +34,10 @@ local windows_configs = function()
       relative = "editor",
       width = win_width,
       height = 1,
-      row = win_height + 5,
+      row = row + win_height - 1,
       col = col,
       style = "minimal",
+      focusable = false,
     },
   }
 end
@@ -53,7 +56,23 @@ M.create_windows = function()
   local footer = create_window(cfgs.footer)
   local body = create_window(cfgs.body)
 
-  vim.api.nvim_create_autocmd("BufLeave", {
+  -- Define custom highlight for header
+  vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
+
+  -- Function to format and update the header
+  local function update_header(buf, filename)
+    local centered_title = " " .. filename .. " "
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { centered_title })
+    vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFilename", 0, 1, -1)
+  end
+
+  -- Ensure the header updates dynamically
+  local function set_file_header(filename)
+    update_header(header.buf, filename)
+  end
+
+  -- Cleanup windows when body is closed
+  vim.api.nvim_create_autocmd("WinClosed", {
     buffer = body.buf,
     callback = function()
       pcall(vim.api.nvim_win_close, header.win, true)
@@ -61,7 +80,7 @@ M.create_windows = function()
     end,
   })
 
-  return { header = header, body = body, footer = footer }
+  return { header = header, body = body, footer = footer, set_file_header = set_file_header }
 end
 
 return M
