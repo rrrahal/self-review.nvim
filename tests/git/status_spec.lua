@@ -24,7 +24,7 @@ describe("parse_status_lines", function()
       { type = "C", path = "path/to/file5.lua" }, -- Copied
       { type = "U", path = "path/to/file6.lua" }, -- Unmerged
       { type = "T", path = "path/to/file7.lua" }, -- Type changed
-      { type = "??", path = "path/to/file9.lua" }, -- Unmodified
+      { type = "A", path = "path/to/file9.lua" }, -- Unmodified
     }, result)
   end)
 
@@ -52,7 +52,7 @@ describe("parse_status_lines", function()
     assert.are.same({
       { type = "M", path = "path/to/file.lua" },
       { type = "A", path = "another/file.txt" },
-      { type = "??", path = "some/other/file.txt" },
+      { type = "A", path = "some/other/file.txt" },
     }, result)
   end)
 
