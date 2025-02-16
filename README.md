@@ -17,8 +17,9 @@ return {
     "rrrahal/self-review.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("self-review")
-      -- you can set up a keybind for the `SelfReview` command here
+      local self_review = require("self-review")
+      -- (Optional) you can set up a keybind here
++      vim.keymap.set("n", "<leader>r", self_review.start_diff, {})
     end,
   },
 }
