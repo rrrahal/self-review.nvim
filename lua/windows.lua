@@ -59,8 +59,15 @@ M.create_windows = function()
   local footer = create_window(cfgs.footer)
   local body = create_window(cfgs.body)
 
+  -- removes the cursor from the created windows
+  for _, win in ipairs({ header, body, footer }) do
+    vim.api.nvim_win_set_option(win.win, "winhl", "Normal:NormalNC,Cursor:NormalNC,CursorLine:NormalNC")
+  end
+
   vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
   vim.api.nvim_set_hl(0, "GitDiffFooter", { fg = "#06B6D4", bold = true })
+
+  local lang = "plaintext"
 
   local function update_header(buf, filename)
     vim.bo[buf].modifiable = true
@@ -69,9 +76,9 @@ M.create_windows = function()
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, { centered_title })
     styles.apply_header_styles(buf)
 
-    -- TODO: this should help with syntax highlightning, but it is not
-    local ft = vim.filetype.match({ filename = filename }) or "plaintext"
-    vim.bo[buf].filetype = ft
+    -- sets the filetype, important to attach treesitter
+    local ft = vim.filetype.match({ filename = filename, buf = buf }) or "plaintext"
+    lang = ft
 
     vim.bo[buf].modifiable = false
   end
@@ -88,13 +95,18 @@ M.create_windows = function()
   local function update_body(buf, content)
     vim.bo[buf].modifiable = true
 
+    local ok, err = pcall(vim.treesitter.start, buf, lang)
+    if not ok then
+      vim.notify("[SelfReview] " .. "treesitter could be attached on lang " .. lang, vim.log.levels.ERROR)
+    end
+
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
     styles.apply_body_styles(buf, content)
 
     vim.bo[buf].modifiable = false
   end
 
-  local function set_file_header(filename)
+  local function set_header(filename)
     update_header(header.buf, filename)
   end
 
@@ -117,7 +129,7 @@ M.create_windows = function()
 
   return {
     body = body,
-    set_file_header = set_file_header,
+    set_header = set_header,
     set_footer = set_footer,
     set_body = set_body,
   }

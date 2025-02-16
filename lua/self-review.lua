@@ -9,9 +9,9 @@ local diffMod = require("git.diff")
 local M = {}
 
 local set_window_content = function(f_windows, header, body, footer)
-  f_windows.set_body(body)
-  f_windows.set_file_header(header)
+  f_windows.set_header(header)
   f_windows.set_footer(footer)
+  f_windows.set_body(body)
 end
 
 -- TODO: is it safe to add those keymaps? double check
