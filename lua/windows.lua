@@ -63,6 +63,8 @@ M.create_windows = function()
   vim.api.nvim_set_hl(0, "GitDiffFooter", { fg = "#06B6D4", bold = true })
 
   local function update_header(buf, filename)
+    vim.bo[buf].modifiable = true
+
     local centered_title = " " .. filename .. " "
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, { centered_title })
     styles.apply_header_styles(buf)
@@ -70,16 +72,26 @@ M.create_windows = function()
     -- TODO: this should help with syntax highlightning, but it is not
     local ft = vim.filetype.match({ filename = filename }) or "plaintext"
     vim.bo[buf].filetype = ft
+
+    vim.bo[buf].modifiable = false
   end
 
   local function update_footer(buf, content)
+    vim.bo[buf].modifiable = true
+
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
     styles.apply_footer_styles(buf)
+
+    vim.bo[buf].modifiable = false
   end
 
   local function update_body(buf, content)
+    vim.bo[buf].modifiable = true
+
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
     styles.apply_body_styles(buf, content)
+
+    vim.bo[buf].modifiable = false
   end
 
   local function set_file_header(filename)
