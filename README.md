@@ -35,6 +35,12 @@ Once installed, *SelfReview* provides the SelfReview command. You can assign it 
 :SelfReview
 ```
 
+You can use the following keybinds inside the floating window:
+- `n` to go to the next diff
+- `p` to go to the previous diff
+- `q` to quit the current floating window 
+
+
 ----
 
 ## Development
