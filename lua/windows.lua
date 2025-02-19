@@ -64,9 +64,6 @@ M.create_windows = function()
     vim.api.nvim_win_set_option(win.win, "winhl", "Normal:NormalNC,Cursor:NormalNC,CursorLine:NormalNC")
   end
 
-  vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
-  vim.api.nvim_set_hl(0, "GitDiffFooter", { fg = "#06B6D4", bold = true })
-
   local lang = "plaintext"
 
   local function update_header(buf, filename)
