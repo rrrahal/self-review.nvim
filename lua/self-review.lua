@@ -2,8 +2,6 @@ local status = require("git.status")
 local windows = require("windows")
 local diffMod = require("git.diff")
 
--- TODO: add meta information about the file (filename) and the amount of diffs
--- TODO: add footer with keymaps/actions
 -- TODO: add keymap to add diff
 
 local M = {}
