@@ -108,7 +108,16 @@ M.create_windows = function()
   end
 
   local function set_footer(content)
-    update_footer(footer.buf, content)
+    local content_str = table.concat(content, " ")
+
+    local footer_phrase = "  n: next diff | p: previous diff | q: quit"
+
+    local screen_width = vim.api.nvim_win_get_width(0)
+    local padding = string.rep(" ", screen_width - #content_str - 2 - #footer_phrase)
+
+    local footer_text = { content_str .. padding .. footer_phrase }
+
+    update_footer(footer.buf, footer_text)
   end
 
   local function set_body(content)
