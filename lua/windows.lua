@@ -1,4 +1,6 @@
 local styles = require("windows_styles")
+local utils = require("utils")
+
 local M = {}
 
 local windows_configs = function()
@@ -104,6 +106,7 @@ M.create_windows = function()
   end
 
   local function set_header(filename)
+    local formatted_filename = utils.format_filename(filename)
     update_header(header.buf, filename)
   end
 
