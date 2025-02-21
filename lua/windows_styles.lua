@@ -1,17 +1,17 @@
 local M = {}
 
 -- HEADER
-vim.api.nvim_set_hl(0, "GitDiffFilename", { fg = "#06B6D4", bold = true })
+vim.api.nvim_set_hl(0, "GitDiffFilename", { bold = true })
 
 M.apply_header_styles = function(buf)
-  vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFilename", 0, 1, -1)
+  vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFilename", 0, 0, -1)
 end
 
 -- FOOTER
-vim.api.nvim_set_hl(0, "GitDiffFooter", { fg = "#06B6D4", bold = true })
+vim.api.nvim_set_hl(0, "GitDiffFooter", { bold = true })
 
 M.apply_footer_styles = function(buf)
-  vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFooter", 0, 1, -1)
+  vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFooter", 0, 0, -1)
 end
 
 -- BODY
