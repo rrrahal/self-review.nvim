@@ -3,7 +3,8 @@
 **SelfReview** is a Neovim plugin that helps you review your work before committing. It creates a floating window displaying the current changes in your Git repository, allowing you to navigate and visually inspect modifications without breaking your Vim flow.
 
 ## Demo
-![Kapture 2025-02-16 at 14 47 32](https://github.com/user-attachments/assets/3bba4eba-833d-48be-91f3-6a9f588695d8)
+![Kapture 2025-02-21 at 15 23 04](https://github.com/user-attachments/assets/fb125aa1-34fc-47f6-bbfe-73425272d2ec)
+
 
 
 
