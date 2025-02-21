@@ -20,7 +20,7 @@ return {
     config = function()
       local self_review = require("self-review")
       -- (Optional) you can set up a keybind here
-+      vim.keymap.set("n", "<leader>r", self_review.start_diff, {})
+      vim.keymap.set("n", "<leader>r", self_review.start_diff, {})
     end,
   },
 }
