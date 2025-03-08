@@ -48,6 +48,35 @@ M.start_diff = function()
   end, {
     buffer = floating_windows.body.buf,
   })
+
+  vim.keymap.set("n", "g", function()
+    local filepath = files[current_diff].path
+
+    -- Get the list of all windows
+    local ws = vim.api.nvim_list_wins()
+
+    -- Find the first non-floating window
+    local target_win = nil
+    for _, win in ipairs(ws) do
+      local config = vim.api.nvim_win_get_config(win)
+      if config.relative == "" then -- Not a floating window
+        target_win = win
+        break
+      end
+    end
+
+    if not target_win then
+      print("No non-floating window found")
+      return
+    end
+
+    vim.api.nvim_set_current_win(target_win)
+
+    vim.cmd("edit " .. vim.fn.fnameescape(filepath))
+    vim.api.nvim_win_close(floating_windows.body.win, true)
+  end, {
+    buffer = floating_windows.body.buf,
+  })
 end
 
 return M
