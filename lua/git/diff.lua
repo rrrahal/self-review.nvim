@@ -42,21 +42,21 @@ end
 
 M.get_diff = function(file)
   local filename = file.path
-  local type = file.type
-  if type == "M" then
+  local type = file.change_type
+  if type == "modification" then
     local diff = vim.fn.system("git diff HEAD " .. filename)
     local diffArray = vim.split(diff, "\n")
     return parse_diff(diffArray)
   end
 
-  if type == "A" then
+  if type == "adition" then
     local diff = vim.fn.system("git diff --no-index /dev/null " .. filename)
     local diffArray = vim.split(diff, "\n")
     return parse_diff(diffArray)
   end
 
   -- TODO: delete is still not working properly
-  if type == "D" then
+  if type == "deletion" then
     local diff = vim.fn.system("git diff --no-index " .. filename .. " /dev/null")
     local diffArray = vim.split(diff, "\n")
     return parse_diff(diffArray)
