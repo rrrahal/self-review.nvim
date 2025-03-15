@@ -1,4 +1,4 @@
-local parse_lines = require("git.status")._parse_status_lines
+local parse_line = require("git.status")._parse_line
 
 describe("parse_status", function()
   it("parses lines correctly with 'X' and 'Y' fields", function()
@@ -33,7 +33,7 @@ describe("parse_status", function()
     }
 
     for i, line in ipairs(lines) do
-      local result = parse_status(line)
+      local result = parse_line(line)
       assert.are.same(expected_results[i], result)
     end
   end)
@@ -46,7 +46,7 @@ describe("parse_status", function()
       "XY",
     }
     for _, line in ipairs(invalid_lines) do
-      local result, err = parse_status(line)
+      local result, err = parse_line(line)
       assert.is_nil(result)
       assert.is_not_nil(err)
     end

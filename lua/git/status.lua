@@ -56,6 +56,6 @@ M.changed_files = function()
 end
 
 -- (Internal) Exposed for testing purposes.
-M._parse_status_lines = parse_status_lines
+M._parse_line = parse_line
 
 return M
