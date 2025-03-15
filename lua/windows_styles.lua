@@ -14,10 +14,6 @@ M.apply_footer_styles = function(buf)
   vim.api.nvim_buf_add_highlight(buf, -1, "GitDiffFooter", 0, 0, -1)
 end
 
--- BODY
-vim.api.nvim_set_hl(0, "DiffAdd", { fg = "#81C784", bg = "none" })
-vim.api.nvim_set_hl(0, "DiffDelete", { fg = "#E57373", bg = "none" })
-
 local ns_gutter = vim.api.nvim_create_namespace("diff_gutter")
 
 local function apply_diff_highlights(buf, lines)
