@@ -6,8 +6,8 @@ local diffMod = require("git.diff")
 
 local M = {}
 
-local set_window_content = function(f_windows, header, body, footer)
-  f_windows.set_header(header)
+local set_window_content = function(f_windows, header, body, footer, staged)
+  f_windows.set_header(header, staged)
   f_windows.set_footer(footer)
   f_windows.set_body(body)
 end
@@ -25,12 +25,24 @@ M.start_diff = function()
 
   local current_diff = 1
   local diff = diffMod.get_diff(files[current_diff])
-  set_window_content(floating_windows, files[current_diff].path, diff.parsed, { current_diff .. "/" .. #files })
+  set_window_content(
+    floating_windows,
+    files[current_diff].path,
+    diff.parsed,
+    { current_diff .. "/" .. #files },
+    files[current_diff].staged
+  )
 
   vim.keymap.set("n", "n", function()
     current_diff = math.min(current_diff + 1, #files)
     local newDiff = diffMod.get_diff(files[current_diff])
-    set_window_content(floating_windows, files[current_diff].path, newDiff.parsed, { current_diff .. "/" .. #files })
+    set_window_content(
+      floating_windows,
+      files[current_diff].path,
+      newDiff.parsed,
+      { current_diff .. "/" .. #files },
+      files[current_diff].staged
+    )
   end, {
     buffer = floating_windows.body.buf,
   })
@@ -38,7 +50,13 @@ M.start_diff = function()
   vim.keymap.set("n", "p", function()
     current_diff = math.max(current_diff - 1, 1)
     local newDiff = diffMod.get_diff(files[current_diff])
-    set_window_content(floating_windows, files[current_diff].path, newDiff.parsed, { current_diff .. "/" .. #files })
+    set_window_content(
+      floating_windows,
+      files[current_diff].path,
+      newDiff.parsed,
+      { current_diff .. "/" .. #files },
+      files[current_diff].staged
+    )
   end, {
     buffer = floating_windows.body.buf,
   })

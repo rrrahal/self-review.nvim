@@ -64,11 +64,10 @@ M.create_windows = function()
   -- default lang
   local lang = "plaintext"
 
-  local function update_header(buf, filename)
+  local function update_header(buf, header_text, filename)
     vim.bo[buf].modifiable = true
 
-    local centered_title = " " .. filename .. " "
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { centered_title })
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, header_text)
     styles.apply_header_styles(buf)
 
     -- sets the filetype, important to attach treesitter
@@ -101,15 +100,31 @@ M.create_windows = function()
     vim.bo[buf].modifiable = false
   end
 
-  local function set_header(filename)
-    local formatted_filename = utils.format_filename(filename)
-    update_header(header.buf, filename)
+  local function set_header(filename, staged)
+    -- TODO: fix formatted filename
+    -- local formatted_filename = utils.format_filename(filename)
+
+    local content_str = table.concat({ filename }, " ")
+
+    local staged_phrase = "STAGED"
+    if not staged then
+      staged_phrase = "NOT STAGED"
+    end
+
+    local screen_width = vim.api.nvim_win_get_width(0)
+    local padding = string.rep(" ", screen_width - #staged_phrase - 2 - #content_str)
+
+    local header_text = { content_str .. padding .. staged_phrase }
+    update_header(header.buf, header_text, filename, staged)
+
+    local hl_group = staged and "DiffAdd" or "DiffDelete"
+    vim.api.nvim_buf_add_highlight(header.buf, -1, hl_group, 0, #content_str + #padding, -1)
   end
 
   local function set_footer(content)
     local content_str = table.concat(content, " ")
 
-    local footer_phrase = "g: open buffer | n: next diff | p: previous diff | q: quit"
+    local footer_phrase = "g: goto buffer | n: next | p: previous | q: quit"
 
     local screen_width = vim.api.nvim_win_get_width(0)
     local padding = string.rep(" ", screen_width - #content_str - 2 - #footer_phrase)
