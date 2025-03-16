@@ -11,7 +11,7 @@ function parse_line(line)
   end
 
   local change_type
-  if x == "A" or y == "A" then
+  if x == "A" or y == "A" or (x == "?" and y == "?") then
     change_type = "addition"
   elseif x == "D" or y == "D" then
     change_type = "deletion"

@@ -49,7 +49,7 @@ M.get_diff = function(file)
     return parse_diff(diffArray)
   end
 
-  if type == "adition" then
+  if type == "addition" then
     local diff = vim.fn.system("git diff --no-index /dev/null " .. filename)
     local diffArray = vim.split(diff, "\n")
     return parse_diff(diffArray)
