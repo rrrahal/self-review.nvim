@@ -61,11 +61,7 @@ M.create_windows = function()
   local footer = create_window(cfgs.footer)
   local body = create_window(cfgs.body)
 
-  -- removes the cursor from the created windows
-  for _, win in ipairs({ header, body, footer }) do
-    vim.api.nvim_win_set_option(win.win, "winhl", "Normal:NormalNC,Cursor:NormalNC,CursorLine:NormalNC")
-  end
-
+  -- default lang
   local lang = "plaintext"
 
   local function update_header(buf, filename)
